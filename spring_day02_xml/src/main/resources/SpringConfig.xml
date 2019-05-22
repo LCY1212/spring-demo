@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="account" class="com.practice.domain.Account">
+        <property name="id" value="4"/>
+        <property name="name" value="哈哈"/>
+        <property name="money" value="200"/>
+    </bean>
+
+    <bean id="account1" class="com.practice.domain.Account">
+        <property name="id" value="4"/>
+        <property name="name" value="娃哈哈"/>
+        <property name="money" value="200"/>
+    </bean>
+
+    <bean id="accountService" class="com.practice.service.impl.AccountServiceImpl">
+        <property name="accountDao" ref="accountDao"/>
+    </bean>
+
+    <bean id="accountDao" class="com.practice.dao.impl.AccountDaoImpl">
+        <property name="template" ref="template"/>
+    </bean>
+
+    <bean id="template" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="url" value="jdbc:mysql:///day05"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    </bean>
+
+</beans>

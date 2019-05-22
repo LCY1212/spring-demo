@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <context:component-scan base-package="com.practice"></context:component-scan>
+
+    <bean id="template" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="url" value="jdbc:mysql:///day05"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    </bean>
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+    <aop:config>
+        <aop:pointcut id="pt" expression="execution(* com.practice.service.impl.AccountServiceImpl.*(..))"/>
+        <aop:aspect ref="tranMan">
+            <aop:before method="startTanMan" pointcut-ref="pt"/>
+            <aop:after-returning method="commit" pointcut-ref="pt"/>
+            <aop:after-throwing method="rollback" pointcut-ref="pt"/>
+            <aop:after method="close" pointcut-ref="pt"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
